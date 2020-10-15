@@ -71,7 +71,7 @@ vector<int> GetNumberFromDecimalToBinary(int numberDecimal)
 	return numberInBinary;
 }
 
-void ShowBinaryPow(int number, int pow, int mod)
+int GetBinaryPow(int number, int pow, int mod)
 {
 	vector<int> numberInBinary = GetNumberFromDecimalToBinary(pow);
 	int result = 1;
@@ -81,16 +81,85 @@ void ShowBinaryPow(int number, int pow, int mod)
 		result = (numberInBinary[i] == 0) ? result2 : Modul(result2 * number, mod);
 	}
 
-	cout << result << '\n';
+	return result;
 }
 // Конец Бинарного возведение в степень
 
-// Миллер рабин
+// Миллер Рабин
+
+bool IsPositive(int number)
+{
+	if(number <= 0)
+	{
+		cout << "Number is not positive!\n";
+		exit(1);
+	}
+	return true;
+}
+
+bool IsOddNumber(int number)
+{
+	IsPositive(number);
+	if(number % 2 == 0)
+	{
+		cout << "Number is even!\n";
+		exit(1);
+	}
+	return true;
+}
+
+int GetS(int number)
+{
+	IsOddNumber(number);
+	int count = 0;
+	number -= 1;
+	while(number != 1)
+	{
+		number /= 2;
+		++count;
+	}
+	return count;
+}
+
+void ShowMillerRabin(int number, int countOfTries, int x)
+{
+	int s = GetS(number);
+	int t = number - 1;
+
+	int randNumber;
+	for(int i = 0; i < countOfTries; i++)
+	{
+		randNumber = x;
+		int y = GetBinaryPow(randNumber, t, number);
+
+		if(y == 1 || y == number - 1)
+			continue;
+		cout << "x = " << x << "\n";
+		for(int j = 1; j < s; j++)
+		{
+			cout << "\ty" << j << " = " << y << "\n";
+			y = Modul(y * y, number);
+
+			if(y == 1)
+				cout << number << " is  not prime!\n";
+
+			if(y == number - 1)
+				break;
+		}
+
+		if(y != number - 1)
+			cout << number << " is not prime!\n";
+	}
+	cout << "" << number << " is prime!\n";
+}
+// Конец Миллера Рабина
 
 int main()
 {
 	//ShowPrimeNumbers(9999999999);
 
-	ShowBinaryPow(2, 5, 10);
+	//GetBinaryPow(2, 5, 10);
+
+	ShowMillerRabin(17, 1, 3);
 	return 0;
 }
