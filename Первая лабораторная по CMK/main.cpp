@@ -1,5 +1,4 @@
 #include <iostream>
-#include <list>
 #include <vector>
 
 using namespace std;
@@ -39,7 +38,7 @@ bool IsPrime(int number)
 
 void ShowPrimeNumbers(int numberEnd)
 {
-	for(int i = 2; i < numberEnd; i++)
+	for(int i = 2; i <= numberEnd; i++)
 	{
 		if(IsPrime(i))
 		{
@@ -86,15 +85,12 @@ void ShowBinaryPow(int number, int pow, int mod)
 }
 // Конец Бинарного возведение в степень
 
-
+// Миллер рабин
 
 int main()
 {
-	int countOfNumbers = 50;
-	//ShowPrimeNumbers(10);
+	//ShowPrimeNumbers(9999999999);
 
-	ShowBinaryPow(2, 16, 100000);
+	ShowBinaryPow(2, 5, 10);
 	return 0;
 }
-
-
