@@ -1,16 +1,19 @@
 #include <iostream>
 #include <list>
+#include <vector>
 
 using namespace std;
 // Вспомогательные функции
 
 // Вывести массив
-void ShowArray(int* arr, int size)
+template<class T>
+void ShowArray(vector<T> arr)
 {
-	for(int i = 0; i < size; i++)
+	for(int i = 0; i < arr.size(); i++)
 	{
 		cout << arr[i] << " ";
 	}
+	cout << '\n';
 }
 
 // Деление по модулю
@@ -33,6 +36,7 @@ bool IsPrime(int number)
 	}
 	return true;
 }
+
 void ShowPrimeNumbers(int numberEnd)
 {
 	for(int i = 2; i < numberEnd; i++)
@@ -47,59 +51,35 @@ void ShowPrimeNumbers(int numberEnd)
 // Конец алгоритма Эратосфена
 
 // Бинарное возведение в степень
-void AddToArray(int*& arr, int size, int newElement)
+vector<int> GetNumberFromDecimalToBinary(int numberDecimal)
 {
-	int* newArray = new int[size + 1];
-	for(int i = 0; i < size; i++)
-	{
-		newArray[i] = arr[i];
-	}
-	newArray[size] = newElement;
-	arr = newArray;
-}
-
-void ReverseArray(int*& arr, int size)
-{
-	int* newArray = new int[size];
-	for(int i = 0; i < size; i++)
-	{
-		newArray[i] = arr[size - i - 1];
-	}
-	arr = newArray;
-}
-
-int* GetNumberFromDecimalToBinary(int numberDecimal, int& sizeNewArray)
-{
-	int size = 0;
-	int* numberInBinary = new int[size];
+	vector<int> numberInBinary;
 	int number10 = numberDecimal;
+
 	while(number10 >= 1)
 	{
-		AddToArray(numberInBinary, size, number10 % 2);
-		size++;
+		numberInBinary.push_back(number10 % 2);
 		number10 /= 2;
 	}
-	ReverseArray(numberInBinary, size);
-	sizeNewArray = size;
+	// инверсия вектора
+	int size = numberInBinary.size();
+	for(int i = 0; i < size / 2; i++)
+	{
+		int temp = numberInBinary[i];
+		numberInBinary[i] = numberInBinary[size - 1 - i];
+		numberInBinary[size - 1 - i] = temp;
+	}
 	return numberInBinary;
 }
 
 void ShowBinaryPow(int number, int pow, int mod)
 {
-	int sizeNumberInBinary;
-	int* numberInBinary = GetNumberFromDecimalToBinary(number, sizeNumberInBinary);
+	vector<int> numberInBinary = GetNumberFromDecimalToBinary(pow);
 	int result = 1;
-	for(int i = 0; i < sizeNumberInBinary; i++)
+	for(int i = 0; i < numberInBinary.size(); i++)
 	{
 		int result2 = Modul(result * result, mod);
-		if(numberInBinary[i] == 0)
-		{
-			result = result2;
-		}
-		else
-		{
-			result = Modul(result2 * number, mod);
-		}
+		result = (numberInBinary[i] == 0) ? result2 : Modul(result2 * number, mod);
 	}
 
 	cout << result << '\n';
@@ -111,10 +91,9 @@ void ShowBinaryPow(int number, int pow, int mod)
 int main()
 {
 	int countOfNumbers = 50;
+	//ShowPrimeNumbers(10);
 
-	ShowPrimeNumbers(10);
-
-	//ShowBinaryPow(33, 9, 5);
+	ShowBinaryPow(2, 16, 100000);
 	return 0;
 }
 
